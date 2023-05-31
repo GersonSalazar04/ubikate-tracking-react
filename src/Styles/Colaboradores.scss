@@ -1,0 +1,87 @@
+.typografy-colaborador {
+    border: 1px solid #ccc;
+    padding: 26px;
+    border-radius: 30px;
+    width: 100%;
+    height: 100px;
+    font-size: 14px;
+    background-color: #066C9E;
+    border-color: #066C9E;
+  }
+
+  .colaborador-texto {
+    color: #FFFFFF;
+    font-size: 14px;
+  }
+
+  .texto-menu-colaborador {
+    color: #FFFFFF;
+    margin-left:1rem ;
+    margin-right: 15px;
+  }
+
+.colaborador-boton {
+    margin-left: 15px;
+    height:50px;
+    width: 200px;
+    border-radius: 20px;
+  }
+
+.colaborador-select {
+    width: 200px; 
+    height: 50px; 
+    font-size: 16px; 
+    border-radius: 30px;
+    background-color: #066C9E;
+    color: #FFFFFF;
+}
+
+
+.colaborador-input {
+    width: 300px; 
+    height: 50px; 
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    color: #FFFFFF;
+}
+
+.custom-table .MuiDataGrid-columnHeader {
+    background-color: #044B6E;
+    color: #FFFFFF;
+  }
+  
+.custom-table .MuiDataGrid-cell {
+    background-color: #066C9E;
+    color: #FFFFFF;
+}
+
+.custom-table .MuiDataGrid-cell {
+    border-top: 1px solid #066C9E;
+}
+
+
+.icon-button {
+  pointer-events: none;
+}
+
+.separador {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.colaborador-select-form {
+  width: 300px; 
+  height: 50px; 
+  font-size: 16px; 
+  border-radius: 30px;
+  background-color: #FFFFFF;
+  color: #FFFFFF;
+}
+
+.colaborador-nuevo-texto {
+  color: #FFFFFF;
+  font-size: 20px;
+}
