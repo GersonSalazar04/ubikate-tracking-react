@@ -171,7 +171,14 @@ export default function ColaboradorNew () {
 
     const handleRoleChange = (e, rowId) => {
         const { value } = e.target;
-        setSelectedRoles([...selectedRoles, {rowId: rowId, value: value}])
+        const existingRoleIndex = selectedRoles.findIndex(role => role.rowId === rowId);
+        if (existingRoleIndex !== -1) {
+            const updatedSelectedRoles = [...selectedRoles];
+            updatedSelectedRoles[existingRoleIndex].value = value;
+            setSelectedRoles(updatedSelectedRoles);
+        } else {
+            setSelectedRoles(prevRoles => [...prevRoles, { rowId: rowId, value: value }]);
+        }
         const updatedRows = roleRows.map((row) => {
             if (row.id === rowId) {
                 return {
