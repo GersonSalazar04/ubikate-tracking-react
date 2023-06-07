@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import AppRouter from './AppRouter';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { themeOptions } from './Styles/theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AppRouter/>
+    <ThemeProvider theme={themeOptions}>
+      <CssBaseline/>
+      <AppRouter/>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

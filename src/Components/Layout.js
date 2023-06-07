@@ -22,6 +22,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import PlaceIcon from '@mui/icons-material/Place';
 import { Grid } from "@mui/material";
 import { Link } from 'react-router-dom';
+import icon from "../images/ubikateLogo.svg";
 
 
 const drawerWidth = 240;
@@ -93,7 +94,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 
-export default function Layout({children}){
+export default function Layout({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -106,8 +107,8 @@ export default function Layout({children}){
   };
 
   const menuOptions = [
-    {name : 'Colaborador' , icon: <PersonIcon />},
-    {name : 'Marcas' , icon: <PlaceIcon />}
+    { name: 'Colaborador', icon: <PersonIcon color='secondary' /> },
+    { name: 'Marcas', icon: <PlaceIcon color='secondary' /> }
   ]
 
   return (
@@ -127,14 +128,18 @@ export default function Layout({children}){
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Ubikate
-          </Typography>
+          <Box component="img" sx={{
+            height: 70,
+            width: 70
+          }}
+            src={icon}
+          >
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton color="secondary" onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
@@ -184,7 +189,7 @@ export default function Layout({children}){
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {index % 2 === 0 ? <InboxIcon color='secondary' /> : <MailIcon color='secondary' />}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -192,7 +197,7 @@ export default function Layout({children}){
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#044B6E', height:'100%' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, height: '100%', maxWidth: 'xl', margin: 'auto' }}>
         <DrawerHeader />
         <Grid item xs={12}>
           {children}

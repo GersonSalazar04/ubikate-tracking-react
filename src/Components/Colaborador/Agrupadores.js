@@ -18,22 +18,25 @@ const MenuProps = {
 };
 
 
-function getStyles(name, agrupadores, theme) {
-  return {
-    fontWeight:
-      agrupadores.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
-export default function MultipleSelectChip({options}) {
+
+export default function MultipleSelectChip({ options }) {
   const theme = useTheme();
   const [agrupadores, setAgrupadores] = React.useState([]);
   const [optiones, setOpciones] = React.useState([]);
+  console.log("selec")
+  function getStyles(name, agrupadores, theme) {
+    return {
+      fontWeight:
+        agrupadores.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+      backgroundColor:  agrupadores.find( grupo => grupo === name ) ? theme.palette.background.default : 'transparent'
+    };
+  }
 
   const handleChange = (event) => {
-    const {target: { value },} = event;
+    const { target: { value }, } = event;
     setAgrupadores(value);
   };
 
@@ -45,39 +48,41 @@ export default function MultipleSelectChip({options}) {
 
   return (
     <>
-        <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
-          sx={{borderRadius:'20px', backgroundColor:'#FFFFFF', width:'300px'}}
-          multiple
-          value={agrupadores}
-          onChange={handleChange}
-          renderValue={(selected) => (
-            <Stack direction="row" spacing={1}>
-              {selected.map((value) => (
-                <Chip
-                    key={value}
-                    label={value}
-                    onDelete={() => handleChipDelete(value)}
-                    onMouseDown={(event) => {
-                        event.stopPropagation();
-                    }}
-                />
-              ))}
-            </Stack>
-          )}
-          MenuProps={MenuProps}
-        >
-          {options.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, agrupadores, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
+      <Select
+        size='small'
+        labelId="demo-multiple-chip-label"
+        id="demo-multiple-chip"
+        sx={{ borderRadius: '20px', width: '300px', overflow: "auto" }}
+        multiple
+        value={agrupadores}
+        onChange={handleChange}
+        renderValue={(selected) => (
+          <Stack direction="row" spacing={1}>
+            {selected.map((value) => (
+              <Chip
+                color='secondary'
+                key={value}
+                label={value}
+                onDelete={() => handleChipDelete(value)}
+                onMouseDown={(event) => {
+                  event.stopPropagation();
+                }}
+              />
+            ))}
+          </Stack>
+        )}
+        MenuProps={MenuProps}
+      >
+        {options.map((name) => (
+          <MenuItem
+            key={name}
+            value={name}
+            style={getStyles(name, agrupadores, theme)}
+          >
+            {name}
+          </MenuItem>
+        ))}
+      </Select>
     </>
   );
 }

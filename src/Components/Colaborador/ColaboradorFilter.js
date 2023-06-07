@@ -15,6 +15,10 @@ import AddIcon from '@mui/icons-material/Add';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import './../../Styles/Colaboradores.scss';
 import { useNavigate } from 'react-router-dom';
+import CircleIcon from '@mui/icons-material/Circle';
+import { KeyboardArrowDown } from '@mui/icons-material';
+import AddEditColaboradorModal from './AddEditColaboradorModal';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 export default function ColaboradorFilter() {
 
@@ -23,9 +27,11 @@ export default function ColaboradorFilter() {
   const [dataInicialCol, setdataInicialCol] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busqueda, setBusqueda] = useState('')
+  const [open, setOpen] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
       const fetchColaboradores = async () => {
           try {
               const data = await getColaborador();
@@ -101,73 +107,103 @@ const filtrarColaboradores = (search) => {
     navigate(`/colaborador/new`);
   }
 
+  const handleAddEditColaboradorClose = () => {
+    setOpen(false)
+  }
+
   return (
     <>
       <Grid container spacing={2} alignItems="center">
-      <Grid item xs={12} pl={0} pr={0} pb={0} pt={0}>
-        <Typography className="typografy-colaborador" variant="body1" component="div">
-            <div className="colaborador-texto" style={{ fontWeight: 'bold'}}>Colaboradores totales</div>
-            <div className="colaborador-texto" style={{ marginTop: '8px'}}>{colaboradores.totalRegistros}</div>
-        </Typography>
-      </Grid>
-      <Grid item xs={12} sm={3}>
-        <Box display="flex" alignItems="center" justifyContent="space-between" p={3}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <PeopleOutlineOutlinedIcon className="colaborador-texto"/>
-            <div className="texto-menu-colaborador">Colaboradores</div>
-            <Button onClick={newColaborador}><AddIcon className="colaborador-texto"/></Button>
-          </div>
-        </Box>
-      </Grid>
-      <Grid item xs={12} sm={3}>
-      <Box display="flex" alignItems="center" justifyContent="center" p={3}>
-        <Button className="colaborador-boton" variant="contained" size="small" sx={{borderRadius: '20px'}}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IosShareIcon sx={{ mr: 1, fontSize:'medium' }}/>
-            <Typography variant="button" sx={{ textTransform: 'none' }}>{capitalize('Exportar a Excel')}</Typography>
-          </Box>
-        </Button> 
-      </Box>
-      </Grid>
-        <Grid item xs={12} sm={3}>
-          <Box display="flex" alignItems="center" justifyContent="center" p={3}>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <Select
-                className='colaborador-select'
-                value={selectFilter}
-                onChange={handleChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'without label' }}
-                sx={{borderRadius: '20px'}}
-              >
-                <MenuItem value={'A'}>Habilitado</MenuItem>
-                <MenuItem value={'E'}>Inhabilitado</MenuItem>
-                <MenuItem value="">Por defecto</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+        <Grid item xs={12} pl={0} pr={0} pb={0} pt={0} >
+          <Typography variant="body1" component="div" sx={{ backgroundColor: "background.paper" }} className='colaboradores-total-container'>
+            <div >Colaboradores totales</div>
+            <div style={{ marginTop: '8px', fontWeight: 'bold', fontSize: '1.2em' }}>{colaboradores.totalRegistros}</div>
+          </Typography>
         </Grid>
-        <Grid item xs={12} sm={3}>
-          <Box display="flex" alignItems="center" justifyContent="center" p={3}>
-          <OutlinedInput 
-          sx={{borderRadius: '20px'}}
-            className='colaborador-input'
-            placeholder="Buscar" 
-            onChange={handleSearch}
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-          />
-          </Box>
+        <Grid item xs={12} display="flex" alignItems="center" justifyContent="space-between" my={4}>
+          <Grid xs={2} display="flex" alignItems="center" justifyContent="flex-start">
+            <Box display="flex" alignItems="center" justifyContent="space-between" style={{ width: '100%' }}>
+              <PeopleOutlineOutlinedIcon color='secondary' />
+              <div style={{ fontWeight: 'bold' }}>Colaboradores</div>
+              <Button onClick={()=> setOpen(true)}><AddIcon color='secondary' /></Button>
+            </Box>
+          </Grid>
+          <Grid xs={10} display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
+            <Button className="export-button" color='secondary' variant="contained" size="small" sx={{ borderRadius: '30px' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <IosShareIcon sx={{ mr: 1, color: "secondaryTextColor.main" }} />
+                <Typography variant="button" sx={{ textTransform: 'none', color: "secondaryTextColor.main", fontWeight: '700', fontSize: '1.2em' }}>Exportar a Excel</Typography>
+              </Box>
+            </Button>
+            <Box display="flex" alignItems="center" justifyContent="center" >
+              <FormControl sx={{ minWidth: 200 }}>
+                <Select
+                  className='colaborador-select'
+                  value={selectFilter}
+                  onChange={handleChange}
+                  IconComponent={KeyboardArrowDown}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'without label' }}
+                  sx={{
+                    borderRadius: '30px', 
+                    "& .MuiSelect-icon": {
+                      color: '#ffffff',
+                    },
+                  }}
+                >
+                  <MenuItem value={'A'}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircleIcon sx={{ color: 'customGreen.main', marginRight: '5px', fontSize: '0.8em' }} />
+                      <div>Habilitado</div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem value={'E'}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircleIcon sx={{ color: 'customRed.main', marginRight: '5px', fontSize: '0.8em' }} />
+                      <div>Inhabilitado</div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem value="">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <CircleIcon sx={{ color: 'customGray.main', marginRight: '5px', fontSize: '0.8em' }} />
+                      <div>Por defecto</div>
+                    </div>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box display="flex" alignItems="center" justifyContent="center" >
+              <OutlinedInput
+                sx={{ borderRadius: '30px' }}
+                className='colaborador-search-input'
+                placeholder="Buscar"
+                onChange={handleSearch}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchIcon color='secondary' />
+                  </InputAdornment>
+                }
+              />
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
-          <ColaboradorTable
-            colaboradores={colaboradores}
-          />
+        <ColaboradorTable
+          colaboradores={colaboradores}
+          loading={loading}
+        />
       </Grid>
+      <AddEditColaboradorModal 
+        open={open} 
+        action="add"
+        handleClose={handleAddEditColaboradorClose} 
+        actionButtonName={"Guardar"} 
+        secondActionName={"Cancelar"}
+        secondActionFunction={handleAddEditColaboradorClose}
+        icon={<AddOutlinedIcon color="secondary"/>}
+        title="Agregar colaborador"
+        />
     </>
   )
 }
