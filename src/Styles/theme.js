@@ -85,7 +85,7 @@ export const themeOptions = createTheme({
     MuiDivider: {
       styleOverrides: {
         root: {
-          backgroundColor: "#fff"
+          backgroundColor: "rgba(255, 255, 255, 0.2)"
         }
       }
     },

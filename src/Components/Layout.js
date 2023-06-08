@@ -16,14 +16,15 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import PersonIcon from '@mui/icons-material/Person';
 import PlaceIcon from '@mui/icons-material/Place';
 import { Grid } from "@mui/material";
 import { Link } from 'react-router-dom';
 import icon from "../images/ubikateLogo.svg";
-
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 
 const drawerWidth = 240;
 
@@ -97,6 +98,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Layout({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [openConfigs, setOpenConfigs] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -104,12 +106,38 @@ export default function Layout({ children }) {
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setOpenConfigs(false);
   };
 
+  const handleConfigMenu = () => {
+    setOpenConfigs(!openConfigs);
+    if (openConfigs) {
+      setOpen(false)
+    } else {
+      setOpen(true)
+    }
+
+  }
+
   const menuOptions = [
-    { name: 'Colaborador', icon: <PersonIcon color='secondary' /> },
+    { name: 'Colaborador', icon: <GroupOutlinedIcon color='secondary' /> },
     { name: 'Marcas', icon: <PlaceIcon color='secondary' /> }
   ]
+
+  const listItemButtonStyle = {
+    minHeight: 40,
+    justifyContent: open ? 'initial' : 'center',
+    p: '15px',
+  }
+
+  const listItemIconStyle = {
+    minWidth: 0,
+    mr: open ? 1 : 'auto',
+    justifyContent: 'center',
+    backgroundColor: "background.default",
+    borderRadius: "50%",
+    padding: "0.5em"
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -129,8 +157,7 @@ export default function Layout({ children }) {
             <MenuIcon />
           </IconButton>
           <Box component="img" sx={{
-            height: 70,
-            width: 70
+            width: 100
           }}
             src={icon}
           >
@@ -139,63 +166,91 @@ export default function Layout({ children }) {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton color="secondary" onClick={handleDrawerClose}>
+          <IconButton color="secondary" onClick={handleDrawerClose} sx={{ ...(openConfigs && { display: 'none' }) }}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {menuOptions.map((menu, index) => (
+        <Box display="flex" flexDirection="column" justifyContent="space-between" sx={{ height: "100%" }}>
+          {
+            !openConfigs ? <><List>
+              {menuOptions.map((menu, index) => (
 
-            <ListItem key={menu.name} disablePadding sx={{ display: 'block' }}>
-              <Link to={`/${menu.name.toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {menu.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={menu.name} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon color='secondary' /> : <MailIcon color='secondary' />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+                <ListItem key={menu.name} disablePadding sx={{ display: 'block' }}>
+                  <Link to={`/${menu.name.toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <ListItemButton
+                      sx={listItemButtonStyle}
+                    >
+                      <ListItemIcon
+                        sx={listItemIconStyle}
+                      >
+                        {menu.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={menu.name} sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              ))}
+            </List>
+              <List>
+                <ListItem disablePadding sx={{ display: 'block' }} onClick={handleConfigMenu}>
+                  <Link style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <ListItemButton sx={listItemButtonStyle}>
+                      <ListItemIcon sx={listItemIconStyle}>
+                        <SettingsOutlinedIcon color='secondary' />
+                      </ListItemIcon>
+                      <ListItemText primary="Configuración" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+                <ListItem disablePadding sx={{ display: 'block' }}>
+                  <Link to={"/"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <ListItemButton sx={listItemButtonStyle}>
+                      <ListItemIcon sx={listItemIconStyle}>
+                        <LogoutOutlinedIcon color='secondary' />
+                      </ListItemIcon>
+                      <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              </List> </> :
+              <Box>
+                <Box display="flex" alignItems="center" gap={2} pl={1} my={2}>
+                  <IconButton onClick={handleConfigMenu}>
+                    <ArrowBackOutlinedIcon color='secondary' />
+                  </IconButton>
+                  <Typography variant='h6' fontWeight="bold" fontSize={16}>
+                    Configuración
+                  </Typography>
+                </Box>
+                <Divider variant='middle' />
+                <List>
+                  <ListItem disablePadding sx={{ display: 'block' }}>
+                    <Link to={"/configuracion/grupos"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <ListItemButton sx={{ backgroundColor: 'background.default', mx: 2, borderRadius: '8px' }}>
+                        <ListItemIcon>
+                          <Diversity3OutlinedIcon color='secondary' />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Typography
+                              component="span"
+                              sx={{ opacity: open ? 1 : 0, fontWeight: 'bold' }}
+                            >
+                              Grupos
+                            </Typography>
+                          }
+                        />
+                      </ListItemButton>
+                    </Link>
+                  </ListItem>
+                </List>
+              </Box>
+          }
+
+        </Box>
+
+
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, height: '100%', maxWidth: 'xl', margin: 'auto' }}>
         <DrawerHeader />
