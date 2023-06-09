@@ -6,6 +6,7 @@ import Layout from './Components/Layout';
 import Login from './Components/Login';
 import MapaPage from './Pages/Marca/MapaPage';
 import ColaboradorNew from './Pages/Colaborador/ColaboradorNew';
+import MarcasPage from './Pages/Asistencia/MarcasPage';
 
 const AppRouter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,8 +28,8 @@ const AppRouter = () => {
                 <Route exact path="/colaborador" element={<ColaboradorPage/>} />
                 <Route exact path="/colaborador/:id/edit" element={<ColaboradorInfo/>} />
                 <Route path="/dashboard" element={<ColaboradorPage/>} />
-                <Route exact path="/marcas" element={<MapaPage/>} />
-                <Route path="/marcas" element={<MapaPage />} />
+                <Route exact path="/mapa" element={<MapaPage/>} />
+                <Route path="/asistencia" element={<MarcasPage />} />
                 <Route exact path="/colaborador/new" element={<ColaboradorNew/>} />
               </Routes>
             </Layout>

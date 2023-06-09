@@ -23,7 +23,7 @@ const columns = [
     field: '',
     headerName: 'Hora',
     valueGetter: (params) => dayjs(params.row && params.row.fechaRegistro).format('HH:mm a'),
-    width: 160,
+    width: 170,
   },
 ];
 
@@ -139,7 +139,7 @@ export default function MarcasTable() {
               <Button variant="contained" size="small" onClick={filterMarcas}>Buscar</Button>
             </Box>
           </Grid>
-          <Box display="flex" alignItems="center" style={{ height: 700, width: '100%' }}>
+          <Box display="flex" alignItems="center" style={{ height: 690, width: '100%' }}>
             <DataGrid
               rows={marcas && marcas.resultados || []}
               columns={columns}

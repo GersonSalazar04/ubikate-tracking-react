@@ -25,6 +25,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
+import ChecklistIcon from '@mui/icons-material/Checklist';
 
 const drawerWidth = 240;
 
@@ -120,8 +121,9 @@ export default function Layout({ children }) {
   }
 
   const menuOptions = [
+    { name: 'Asistencia', icon: <ChecklistIcon color='secondary' /> },
     { name: 'Colaborador', icon: <GroupOutlinedIcon color='secondary' /> },
-    { name: 'Marcas', icon: <PlaceIcon color='secondary' /> }
+    { name: 'Mapa', icon: <PlaceIcon color='secondary' /> }
   ]
 
   const listItemButtonStyle = {
@@ -252,7 +254,7 @@ export default function Layout({ children }) {
 
 
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, height: '100%', maxWidth: 'xl', margin: 'auto' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, height: '100%' }}>
         <DrawerHeader />
         <Grid item xs={12}>
           {children}

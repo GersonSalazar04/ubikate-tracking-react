@@ -28,7 +28,7 @@ export default function Map({ coords }) {
       center={coords || [51.505, -0.09]}
       zoom={15}
       scrollWheelZoom={true}
-      style={{ height: '820px', width: '100%' }}
+      style={{ height: '100%', width: '100%' }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
