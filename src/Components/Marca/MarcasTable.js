@@ -8,6 +8,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid } from '@mui/x-data-grid';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { obtenerMarcas } from '../../Actions/Marca/Marca-api';
+import 'dayjs/locale/es';
+
+dayjs.locale('es');
 
 const columns = [
   { field: 'situacionRegistro', headerName: 'Tipo Doc id', width: 90 },
@@ -113,7 +116,7 @@ export default function MarcasTable() {
           </Grid>
           <Grid item xs={6}>
             <Box display="flex" p={1}>
-              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
+              <LocalizationProvider dateAdapter={AdapterDayjs} locale='es'>
                 <DemoContainer components={['DatePicker', 'DatePicker']}>
                   <DatePicker
                     label="Fecha inicio"
