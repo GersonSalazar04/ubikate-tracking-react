@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Button, OutlinedInput, Box, Paper, Typography } from "@mui/material";
+import { Grid, Button, OutlinedInput, Box, Typography } from "@mui/material";
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -7,10 +7,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DataGrid } from '@mui/x-data-grid';
 import { obtenerMarcas } from '../../Actions/Marca/Marca-api';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-import AddIcon from '@mui/icons-material/Add';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import { debounce } from 'lodash';
+import 'dayjs/locale/es';
+
+dayjs.locale('es');
 
 const columns = [
     { field: 'situacionRegistro', headerName: 'Tipo Doc id', flex: 1 },
@@ -47,8 +50,8 @@ export default function MarcasPage() {
     };
   
     const [marcas, setMarcas] = useState({});
-    const [fechaInicio, setFechaInicio] = useState(dayjs());
-    const [fechaFin, setFechaFin] = useState(dayjs());
+    const [fechaInicio, setFechaInicio] = useState(null);
+    const [fechaFin, setFechaFin] = useState(null);
     const [nombreEmpleado, setNombreEmpleado] = useState("");
 
     const onChangeFechaInicio = (date) => {
@@ -58,22 +61,19 @@ export default function MarcasPage() {
     const onChangeFechaFin = (date) => {
         setFechaFin(date);
     }
-    
-    const onChangeNombre = (event) => {
-        setNombreEmpleado(event.target.value);
-    }
-     
-    const disabledDates = (date) => {
-        const itemDate = getFormattedDate(date);
-        const startDate = fechaInicio ? getFormattedDate(fechaInicio) : Number.MAX_VALUE;
-        return startDate && itemDate < startDate;
-    };
-    
-    const filterMarcas = async () => {
-        let filteredData = [];
+
+    const handleSearch = debounce((event) => {
+        const nombre = event.target.value
+        setNombreEmpleado(nombre);
+        filterMarcas(nombre);
+    }, 1000);
+
+    const filterMarcas = async (nombre) => {
+      let filteredData = [];
+      if (fechaInicio && fechaFin) {
         const startDate = fechaInicio ? fechaInicio.toDate() : "";
         const endDate = fechaFin ? fechaFin.toDate() : "";
-        const filters = {fechaInicio: startDate, fechaFin: endDate, nombre: nombreEmpleado};
+        const filters = {fechaInicio: startDate, fechaFin: endDate, nombre: nombre || ""};
         const data = await obtenerMarcas(filters);
         filteredData = data.resultados;
     
@@ -82,7 +82,14 @@ export default function MarcasPage() {
           resultados: filteredData,
           totalRegistros: filteredData.length
         }));
+      }
     }
+     
+    const disabledDates = (date) => {
+        const itemDate = getFormattedDate(date);
+        const startDate = fechaInicio ? getFormattedDate(fechaInicio) : Number.MAX_VALUE;
+        return startDate && itemDate < startDate;
+    };
 
     return (
       <>
@@ -95,27 +102,22 @@ export default function MarcasPage() {
               </Typography>
             </Grid>
             <Grid item xs={12} display="flex" alignItems="center" justifyContent="space-between" my={4}>
-              <Grid xs={2} display="flex" alignItems="center" justifyContent="flex-start">
-                <Box display="flex" alignItems="center" justifyContent="space-between" style={{ width: '100%' }}>
-                  <ChecklistIcon color='secondary' />
-                  <div style={{ fontWeight: 'bold' }}>Marcas</div>
-                  <Button><AddIcon color='secondary' /></Button>
-                </Box>
+              <Grid xs={2} display="flex" alignItems="initial">
+                <Box display="flex" sx={{marginRight:'50px'}}><ChecklistIcon color='secondary' /></Box>
+                <Box display="flex" sx={{marginRight:'50px'}}><Typography sx={{fontWeight: 'bold'}}>Marcas</Typography></Box>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={6} display="flex" alignItems="center">
                 <Box display="flex" p={1}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale='es'>
                     <DemoContainer components={['DatePicker', 'DatePicker']}>
                       <DatePicker
-                        label="Fecha inicio"
-                        value={fechaInicio}
+                        label="Desde"
                         format='DD/MM/YYYY'
                         onChange={onChangeFechaInicio}
                         disableFuture
                       />
                       <DatePicker
-                        label="Fecha fin"
-                        value={fechaFin}
+                        label="Hasta"
                         format='DD/MM/YYYY'
                         onChange={onChangeFechaFin}
                         disableFuture
@@ -123,6 +125,9 @@ export default function MarcasPage() {
                       />
                       </DemoContainer>
                   </LocalizationProvider>
+                </Box>
+                <Box display="flex" alignItems="center" sx={{borderRadius: '20px', paddingLeft: '30px'}} p={3}>
+                  <Button variant="contained" size="small" onClick={() => {filterMarcas(nombreEmpleado)}}>Filtrar</Button>
                 </Box>
               </Grid>
               <Grid xs={10} display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
@@ -137,19 +142,14 @@ export default function MarcasPage() {
                     sx={{ borderRadius: '30px' }}
                     className='colaborador-search-input'
                     placeholder="Buscar"
-                    onChange={onChangeNombre}
+                    onChange={handleSearch}
                     startAdornment={
                       <InputAdornment position="start">
                         <SearchIcon color='secondary' />
                       </InputAdornment>
                     }
                   />
-                </Box>  
-                {/* <Grid item xs={2}>
-                  <Box display="flex" alignItems="center" justifyContent="space-between" sx={{borderRadius: '20px', paddingLeft: '40px'}} p={3}>
-                    <Button variant="contained" size="small" onClick={filterMarcas}>Buscar</Button>
-                  </Box>
-                </Grid> */}
+                </Box>
               </Grid>
             </Grid>
             <Box display="flex" alignItems="center" style={{ height: 550, width: '100%' }}>
